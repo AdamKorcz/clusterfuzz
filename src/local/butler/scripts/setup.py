@@ -287,6 +287,15 @@ class GoogleFuzzTestDefaults(BaseBuiltinFuzzerDefaults):
     self.key_id = 1341
 
 
+class NativeGoDefaults(BaseBuiltinFuzzerDefaults):
+  """Default values for googlefuzztest."""
+
+  def __init__(self):
+    super().__init__()
+    self.name = 'nativeGo'
+    self.key_id = 1342
+
+
 def setup_config(non_dry_run):
   """Set up configuration."""
   config = data_types.Config.query().get()
@@ -307,6 +316,7 @@ def setup_fuzzers(non_dry_run):
       LibFuzzerDefaults(),
       HonggfuzzDefaults(),
       GoogleFuzzTestDefaults(),
+      NativeGoDefaults(),
       SyzkallerDefaults()
   ]:
     fuzzer = data_types.Fuzzer.query(
