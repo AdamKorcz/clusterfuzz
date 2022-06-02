@@ -1808,7 +1808,7 @@ class FuzzingSession(object):
 
     # Check if we have a bad build, i.e. one that crashes on startup.
     # If yes, bail out.
-    logs.log('Checking for bad build.')
+    logs.log('Checking for bad build.....')
     crash_revision = environment.get_value('APP_REVISION')
     is_bad_build = testcase_manager.check_for_bad_build(self.job_type,
                                                         crash_revision)
@@ -1828,6 +1828,8 @@ class FuzzingSession(object):
 
     engine_impl = engine.get(self.fuzzer.name)
 
+    logs.log("engine_impl: ", engine_impl, "#"*300)
+
     if engine_impl:
       crashes, fuzzer_metadata = self.do_engine_fuzzing(engine_impl)
 
@@ -1835,6 +1837,7 @@ class FuzzingSession(object):
       testcase_file_paths = []
       testcases_metadata = {}
     else:
+      logs.log("No engine found for: ", engine_impl)
       fuzzer_directory = setup.get_fuzzer_directory(self.fuzzer_name)
       fuzzer_metadata, testcase_file_paths, testcases_metadata, crashes = (
           self.do_blackbox_fuzzing(self.fuzzer, fuzzer_directory,

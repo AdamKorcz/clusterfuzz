@@ -59,6 +59,7 @@ def _setup_bot_directory(args):
 
 def _setup_environment_and_configs(args, appengine_path):
   """Set up environment variables and configuration files."""
+  print('Creating environment and configs')
   clusterfuzz_dir = os.path.abspath(os.path.join(args.directory, 'clusterfuzz'))
 
   # Matches startup scripts.
@@ -112,8 +113,10 @@ def execute(args):
   _setup_environment_and_configs(args, appengine_path)
 
   try:
+    print('Executing run_bot.py', args.directory)
     os.chdir(os.path.join(args.directory, 'clusterfuzz'))
     proc = common.execute_async('python src/python/bot/startup/run_bot.py')
+    print("proc: ", proc)
 
     def _stop_handler(*_):
       print('Bot has been stopped. Exit.')
@@ -122,5 +125,8 @@ def execute(args):
     signal.signal(signal.SIGTERM, _stop_handler)
     common.process_proc_output(proc)
     proc.wait()
+    for line in proc.stdout:
+      print(line)
+    print('Here')
   except KeyboardInterrupt:
     _stop_handler()
